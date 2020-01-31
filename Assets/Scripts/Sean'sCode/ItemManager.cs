@@ -6,10 +6,13 @@ public class ItemManager : MonoBehaviour
 {
     [SerializeField]
     private List<ItemObject> existItemObjects = new List<ItemObject>();
+    [SerializeField]
+    private int MaxAllowedItems = 15;
 
     public bool AddItem(ItemObject io)
     {
-        if(!existItemObjects.Contains(io))
+        KillOvermuchItem();
+        if (!existItemObjects.Contains(io))
         {
             existItemObjects.Add(io);
             return true;
@@ -30,6 +33,15 @@ public class ItemManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    private void KillOvermuchItem()
+    {
+        if(existItemObjects.Count >= MaxAllowedItems)
+        {
+            Destroy(existItemObjects[0].gameObject);
+            existItemObjects.Remove(existItemObjects[0]);
         }
     }
 }
