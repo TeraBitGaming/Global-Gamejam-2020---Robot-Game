@@ -8,7 +8,7 @@ public class PlayerController2D : MonoBehaviour
 
     public float speed = 10.0f;
 
-    private float jumpTimer = 0;
+    private float jumpTimer = 1;
 
     private CapsuleCollider2D CC2d;
 
