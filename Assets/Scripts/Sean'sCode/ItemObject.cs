@@ -9,6 +9,10 @@ public class ItemObject : MonoBehaviour
     [SerializeField]
     private bool IsBeingHeld;
 
+    public void SetHolding(bool holding){
+        IsBeingHeld = holding;
+    }
+
     public void SetItemData(Item i)
     {
         theItemData = i;
