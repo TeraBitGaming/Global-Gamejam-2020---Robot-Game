@@ -14,7 +14,12 @@ public class Dropper : MonoBehaviour
     private GameObject emptyItemPrefab;
     [SerializeField]
     private ItemManager im;
-    
+
+    private void Start()
+    {
+        im = FindObjectOfType<ItemManager>();
+    }
+
     private bool DropCounter()
     {
         counter += Time.deltaTime;
@@ -31,8 +36,9 @@ public class Dropper : MonoBehaviour
 
     private void DropItem()
     {
-        var theOne = Instantiate(emptyItemPrefab, transform.position, Quaternion.identity,FindObjectOfType<ItemManager>().transform);
-        theOne.GetComponent<ItemObject>().SetItemData(itemData[Random.Range(0, itemData.Count)]);
+        Vector2 offset = new Vector2(Random.Range(-0.5f, 0.5f), 0);
+        var theOne = Instantiate(emptyItemPrefab, (Vector2)transform.position + offset, Quaternion.identity,FindObjectOfType<ItemManager>().transform);
+        theOne.GetComponent<ItemObject>().SetItemData(itemData[Random.Range(0, itemData.Count-1)]);
         if (theOne.GetComponent<ItemObject>().GetItemData().GetName() != "")
             theOne.name = theOne.GetComponent<ItemObject>().GetItemData().GetName() + theOne.name;
         if (theOne.GetComponent<ItemObject>().GetItemData().GetSprite() != null)

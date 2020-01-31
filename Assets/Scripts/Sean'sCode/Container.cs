@@ -9,7 +9,13 @@ public class Container : MonoBehaviour
     [SerializeField]
     private int itemCount = 0;
     [SerializeField]
-    private ItemObject itemType;
+    private Item itemType;
+    private ItemManager im;
+
+    private void Start()
+    {
+        im = FindObjectOfType<ItemManager>();
+    }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -18,20 +24,28 @@ public class Container : MonoBehaviour
         {
             if(!collision.GetComponent<ItemObject>().GetHolding())
             {
-                if(itemCount == 0 && itemType == null)
+                if(itemCount < capability)
                 {
-                    itemType = collision.GetComponent<ItemObject>();
-                    itemCount++;
-                    Destroy(collision.gameObject);
+                    if (itemCount == 0 && itemType == null)
+                    {
+                        itemType = collision.GetComponent<ItemObject>().GetItemData();
+                        itemCount++;
+                        im.RemoveItem(collision.GetComponent<ItemObject>());
+                        Destroy(collision.gameObject);
+                    }
+                    else if (itemType == collision.GetComponent<ItemObject>().GetItemData())
+                    {
+                        itemCount++;
+                        im.RemoveItem(collision.GetComponent<ItemObject>());
+                        Destroy(collision.gameObject);
+                    }
                 }
-                
-                if(itemType == collision.GetComponent<ItemObject>())
-                {
-                    itemCount++;
-                    Destroy(collision.gameObject);
-                }
-
             }
         }
+    }
+    
+    private void PickUpItem()
+    {
+        //If the player is not carrying things
     }
 }
