@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53dce1ac6b4f42845aaf841c37a2bfc6, type: 3}
-  m_Name: New Item 1
+  m_Name: BasketBall
   m_EditorClassIdentifier: 
-  iName: TESTOBJ2
-  iSprite: {fileID: 3106522979324899121, guid: 0a759c7d87d38064d86ddd51f79ecad3, type: 3}
+  iName: BasketBall
+  iSprite: {fileID: 4547188192179229121, guid: e17bb9809a203564f82379274a704388, type: 3}
