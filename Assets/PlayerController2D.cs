@@ -197,6 +197,18 @@ public class PlayerController2D : MonoBehaviour
     // Grounded detection.
     void OnTriggerStay2D(Collider2D col){
         grounded = true;
+
+        if(col.GetComponent<Container>())
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (target == null)
+                {
+                    target = col.GetComponent<Container>().GetItemFromContainer();
+                    target.GetComponent<ItemObject>().GetPickedUp();
+                }
+            }
+        }
     }
     
     void OnTriggerExit2D(Collider2D col){

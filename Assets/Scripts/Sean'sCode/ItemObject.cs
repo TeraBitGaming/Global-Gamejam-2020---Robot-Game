@@ -52,10 +52,12 @@ public class ItemObject : MonoBehaviour
     public void GetPickedUp()
     {
         GetComponent<Animator>().SetBool("Dying", false);
+        IsBeingHeld = true;
     }
 
     public void GetThrowedAway()
     {
         Invoke("PlayBlinkingAnim", lifeTime);
+        IsBeingHeld = false;
     }
 }
