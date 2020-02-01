@@ -9,9 +9,13 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private int MaxAllowedItems = 15;
 
-    public bool AddItem(ItemObject io)
+    private void Update()
     {
         KillOvermuchItem();
+    }
+
+    public bool AddItem(ItemObject io)
+    {
         if (!existItemObjects.Contains(io))
         {
             existItemObjects.Add(io);
