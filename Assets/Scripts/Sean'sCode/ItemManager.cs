@@ -11,7 +11,7 @@ public class ItemManager : MonoBehaviour
 
     private void Update()
     {
-        KillOvermuchItem();
+
     }
 
     public bool AddItem(ItemObject io)
@@ -40,20 +40,6 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    private void KillOvermuchItem()
-    {
-        if(existItemObjects.Count >= MaxAllowedItems-1)
-        {
-            existItemObjects[0].gameObject.GetComponent<Animator>().SetTrigger("Destroy");
-        }
-    }
-
-    public void Execution(ItemObject io)
-    {
-
-        Destroy(io.gameObject);
-        existItemObjects.Remove(io);
-    }
 
     public bool ListIsFull()
     {

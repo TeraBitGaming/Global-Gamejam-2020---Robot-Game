@@ -104,7 +104,7 @@ public class PlayerController2D : MonoBehaviour
             if(hit.collider != null){
                 if (hit.collider.tag == "Grabbable Object"){
                     target = hit.transform.gameObject;
-                    target.GetComponent<ItemObject>().SetHolding(true);
+                    target.GetComponent<ItemObject>().GetPickedUp();
                     grabLock = true;
                 }
             }
@@ -117,7 +117,7 @@ public class PlayerController2D : MonoBehaviour
             if(Input.GetAxis("Fire1") != 0 && grabLock == false){
                 
                 target.GetComponent<Rigidbody2D>().velocity = new Vector2(lastDir * yeetSpeed, 3.0f) + rb.velocity;
-                
+                target.GetComponent<ItemObject>().GetThrowedAway();
                 target = null;
             }
         }
