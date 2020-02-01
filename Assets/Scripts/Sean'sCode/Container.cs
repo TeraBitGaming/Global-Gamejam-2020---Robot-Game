@@ -54,6 +54,7 @@ public class Container : MonoBehaviour
     {
         if(itemCount == 0)
         {
+            itemType = null;
             inside.GetComponent<SpriteRenderer>().sprite = null;
         }
     }

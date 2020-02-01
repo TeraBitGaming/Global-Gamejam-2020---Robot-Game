@@ -27,4 +27,9 @@ public class ItemObject : MonoBehaviour
     {
         return IsBeingHeld;
     }
+
+    public void SelfDestruction()
+    {
+        FindObjectOfType<ItemManager>().Execution(this);
+    }
 }
