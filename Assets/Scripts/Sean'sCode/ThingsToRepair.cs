@@ -1,62 +1,98 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ThingsToRepair : MonoBehaviour
 {
     [SerializeField]
-    private bool multipleItemsRequired;
+    private int stage = 0;// stage1 = start breaking, and 5 is broken totally.
     [SerializeField]
-    private Item[] requiredItems;
+    private Sprite[] stageSprites = new Sprite[5];
     [SerializeField]
-    private Item requiredItem;
+    private float stageCounter = 0;
     [SerializeField]
-    private float timeLimit = 10f;
+    private float secondsPerStage;
     [SerializeField]
-    private float timeCounter = 0;
+    private float spawningChance;
     [SerializeField]
-    private bool Active = false;
+    private float RandomNum;
     [SerializeField]
-    private bool isBroken = false;
+    private Vector2 timeBetween = new Vector2(10, 30);
+    [SerializeField]
+    private List<Item> requiredItems = new List<Item>();
 
-    private void limitCounter()
+    private void Start()
     {
-        if(timeCounter < timeLimit)
+        requiredItems = FindObjectOfType<DifficultyController>().GenerateRequiredItems();
+        StartCoroutine("SpawningMobs");
+    }
+
+
+    private void stageCounting()
+    {
+        if (stage < 5)
         {
-            timeCounter++;
+            if (stageCounter < secondsPerStage)
+            {
+                stageCounter += Time.deltaTime;
+            }
+            else
+            {
+                stageCounter = 0;
+                stage++;
+                RefreshStage();
+            }
+        }
+    }
+
+    IEnumerator SpawningMobs()
+    {
+        if(stage < 5)
+        {
+
         }
         else
         {
-            isBroken = true;
+            RandomNum = UnityEngine.Random.Range(0f, 1f);
+            if(RandomNum <= spawningChance)
+            {
+                //Spawning Mob
+                print("Mob spawned, chance was " + RandomNum);
+            }
         }
+
+        yield return new WaitForSeconds(1);
+
+        StartCoroutine(SpawningMobs());
+
+    }
+
+    private void RefreshStage()
+    {
+        GetComponent<SpriteRenderer>().sprite = stageSprites[stage - 1];
+    }
+
+    private void Update()
+    {
+        secondsPerStage = FindObjectOfType<DifficultyController>().GetSecPerStage();
+        spawningChance = FindObjectOfType<DifficultyController>().GetChance();
+        stageCounting();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponent<PlayerController2D>())
+        if(collision.GetComponent<ItemObject>())
         {
-            if(!isBroken)
+            if (requiredItems.Contains(collision.GetComponent<ItemObject>().GetItemData()))
             {
-                if(Input.GetKey(KeyCode.E))
-                {
-                    Active = false;
-                }
+                requiredItems.Remove(collision.GetComponent<ItemObject>().GetItemData());
+            }
+
+            if (requiredItems.Count <= 0)
+            {
+                Destroy(this.gameObject);
             }
         }
     }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.GetComponent<PlayerController2D>())
-        {
-            if (!isBroken)
-            {
-                if (Input.GetKey(KeyCode.E))
-                {
-                    Active = false;
-                }
-            }
-        }
-    }
-
 }
