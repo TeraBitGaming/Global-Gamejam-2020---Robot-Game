@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4715838866340489344}
   - component: {fileID: 3802164705225076400}
   - component: {fileID: 69202445}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 256736585713442621, guid: b194bec29892fce4e8345907f57641a1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,7 +102,7 @@ Rigidbody2D:
   m_Mass: 3
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -147,7 +147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  jumpForce: 20
+  jumpForce: 40
+  hpManager: {fileID: 0}
   yeetSpeed: 7
   grounded: 1
 --- !u!70 &4715838866340489344

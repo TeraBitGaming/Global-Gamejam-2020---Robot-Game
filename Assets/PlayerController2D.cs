@@ -23,6 +23,13 @@ public class PlayerController2D : MonoBehaviour
 
     private bool grabLock = false;
 
+    private bool controlSuppressed = false;
+
+    private Vector2 launchdirection;
+
+    [SerializeField]
+    private HpManager hpManager;
+
     [SerializeField]
     private float yeetSpeed = 5;
 
@@ -51,17 +58,18 @@ public class PlayerController2D : MonoBehaviour
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
         }
 
-        rb.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, rb.velocity.y);
+        // if(!controlSuppressed) {
+            rb.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, rb.velocity.y);
+        // }
     }
 
     void Update(){
 
-        // For foot-step tippy taps.
-        // if (Input.GetAxis("Horizontal") != 0 && !GetComponent<AudioSource>().isPlaying){
-        //     GetComponent<AudioSource>().Play();
-        // } else if (Input.GetAxis("Horizontal") == 0){
-        //     GetComponent<AudioSource>().Pause();
+        // if(!hpManager.getInvincible() && controlSuppressed){
+        //     controlSuppressed = false;
         // }
+
+        // For foot-step tippy taps.
 
         if (Input.GetAxis("Horizontal") != 0 && !GetComponent<AudioSource>().isPlaying && grounded){
             GetComponent<AudioSource>().Play();
@@ -201,5 +209,18 @@ public class PlayerController2D : MonoBehaviour
     
     void OnTriggerExit2D(Collider2D col){
         grounded = false;
+    }
+
+    void OnCollisionEnter2D(Collision2D collider){
+        if(collider.gameObject.tag == "Enemy" & !hpManager.getInvincible()){
+            // controlSuppressed = true;
+
+            // launchdirection = new Vector2(gameObject.transform.position.x - collider.collider.transform.position.x * 3, gameObject.transform.position.y - collider.collider.transform.position.y * -3);
+            // Debug.Log(launchdirection);
+            // if(rb.velocity.x < 10 && rb.velocity.y < 10){
+            //     rb.AddForce(launchdirection, ForceMode2D.Impulse);
+            // }
+            hpManager.takeDamage();
+        }
     }
 }
