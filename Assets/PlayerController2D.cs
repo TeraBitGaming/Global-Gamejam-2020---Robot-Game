@@ -37,6 +37,14 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField]
     private float jumpTimerSpeed = 0.001f;
 
+    bool vector2Mask(Vector2 varToMask, float minMax){
+        if(varToMask.x < minMax && varToMask.x > -minMax && varToMask.y < minMax && varToMask.y > -minMax){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -112,6 +120,20 @@ public class PlayerController2D : MonoBehaviour
         }
         if(Input.GetAxis("Fire1") == 0){
             grabLock = false;
+        }
+
+        gameObject.GetComponent<Animator>().SetFloat("Direction", Input.GetAxis("Horizontal"));
+
+        if(lastDir < 0){
+            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        } else {
+            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        if(vector2Mask(rb.velocity, 1.5f)){
+            gameObject.GetComponent<Animator>().SetBool("Idle", true);
+        } else {
+            gameObject.GetComponent<Animator>().SetBool("Idle", false);
         }
     }
 
