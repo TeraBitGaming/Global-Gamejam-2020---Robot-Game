@@ -55,7 +55,22 @@ public class PlayerController2D : MonoBehaviour
     }
 
     void Update(){
-        
+
+        // For foot-step tippy taps.
+        // if (Input.GetAxis("Horizontal") != 0 && !GetComponent<AudioSource>().isPlaying){
+        //     GetComponent<AudioSource>().Play();
+        // } else if (Input.GetAxis("Horizontal") == 0){
+        //     GetComponent<AudioSource>().Pause();
+        // }
+
+        if (Input.GetAxis("Horizontal") != 0 && !GetComponent<AudioSource>().isPlaying && grounded){
+            GetComponent<AudioSource>().Play();
+
+        } else if (Input.GetAxis("Horizontal") == 0 || !grounded){
+            GetComponent<AudioSource>().Pause();
+
+        }
+            
         if (Input.GetAxis("Horizontal") > 0){
             lastDir = 1;
 
@@ -101,7 +116,7 @@ public class PlayerController2D : MonoBehaviour
 
             if(Input.GetAxis("Fire1") != 0 && grabLock == false){
                 
-                target.GetComponent<Rigidbody2D>().velocity = new Vector2(lastDir * yeetSpeed, 3.0f);
+                target.GetComponent<Rigidbody2D>().velocity = new Vector2(lastDir * yeetSpeed, 3.0f) + rb.velocity;
                 
                 target = null;
             }
