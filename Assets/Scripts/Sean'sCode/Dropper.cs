@@ -52,8 +52,11 @@ public class Dropper : MonoBehaviour
     {
         if(DropCounter())
         {
-            if(!StopDropping)
-                DropItem();
+            if (!StopDropping)
+            {
+                if(!FindObjectOfType<ItemManager>().ListIsFull())
+                    DropItem();
+            }
         }
     }
 
