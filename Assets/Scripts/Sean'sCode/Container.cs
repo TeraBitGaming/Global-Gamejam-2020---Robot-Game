@@ -13,6 +13,8 @@ public class Container : MonoBehaviour
     private ItemManager im;
     [SerializeField]
     private GameObject inside;
+    [SerializeField]
+    private GameObject emptyItemPrefab;
 
     private void Start()
     {
@@ -47,9 +49,43 @@ public class Container : MonoBehaviour
             }
         }
     }
-    
-    private void PickUpItem()
+
+    private void EmptyCheck()
     {
+        if(itemCount == 0)
+        {
+            inside.GetComponent<SpriteRenderer>().sprite = null;
+        }
+    }
+    
+    public GameObject GetItemFromContainer()
+    {
+        GameObject itemToReturn;
         //If the player is not carrying things
+        if (itemCount > 0)
+        {
+            itemToReturn = Instantiate(emptyItemPrefab, (Vector2)transform.position + new Vector2(0, -2), Quaternion.identity, FindObjectOfType<ItemManager>().transform);
+            itemToReturn.GetComponent<ItemObject>().SetItemData(itemType);
+            if (itemToReturn.GetComponent<ItemObject>().GetItemData().GetName() != "")
+                itemToReturn.name = itemToReturn.GetComponent<ItemObject>().GetItemData().GetName() + itemToReturn.name;
+            if (itemToReturn.GetComponent<ItemObject>().GetItemData().GetSprite() != null)
+                itemToReturn.GetComponent<SpriteRenderer>().sprite = itemToReturn.GetComponent<ItemObject>().GetItemData().GetSprite();
+            im.AddItem(itemToReturn.GetComponent<ItemObject>());
+            itemCount--;
+            EmptyCheck();
+            return itemToReturn;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            GetItemFromContainer();
+        }
     }
 }

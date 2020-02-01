@@ -14,6 +14,8 @@ public class Dropper : MonoBehaviour
     private GameObject emptyItemPrefab;
     [SerializeField]
     private ItemManager im;
+    [SerializeField]
+    private bool StopDropping = false;//For testing purpose.
 
     private void Start()
     {
@@ -50,7 +52,8 @@ public class Dropper : MonoBehaviour
     {
         if(DropCounter())
         {
-            DropItem();
+            if(!StopDropping)
+                DropItem();
         }
     }
 
