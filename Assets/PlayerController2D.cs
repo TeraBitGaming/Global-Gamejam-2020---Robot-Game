@@ -177,12 +177,20 @@ public class PlayerController2D : MonoBehaviour
 
         if(rb.velocity.y > 0){
             gameObject.GetComponent<Animator>().SetInteger("VerticalMomentum", 1);
+            gameObject.GetComponent<Animator>().SetBool("Idle", false);
         } else if (rb.velocity.y < 0){
             gameObject.GetComponent<Animator>().SetInteger("VerticalMomentum", -1);
+            gameObject.GetComponent<Animator>().SetBool("Idle", false);
         }
         
         if (rb.velocity.y < 0.1 && rb.velocity.y > -0.1){
             gameObject.GetComponent<Animator>().SetInteger("VerticalMomentum", 0);
+        }
+
+        if (target != null){
+            gameObject.GetComponent<Animator>().SetBool("Carrying", true);
+        } else {
+            gameObject.GetComponent<Animator>().SetBool("Carrying", false);
         }
     }
 
