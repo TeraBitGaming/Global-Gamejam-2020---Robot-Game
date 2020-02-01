@@ -54,6 +54,7 @@ MonoBehaviour:
   emptyItemPrefab: {fileID: 3269243936997083986, guid: 0fc2e26b7d0ed384d81594c9b9516b26,
     type: 3}
   im: {fileID: 0}
+  StopDropping: 0
 --- !u!212 &2618093574953635698
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -93,7 +94,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 4804996213483478276, guid: d1b23a61eb7602c4592de4a6598fbabb,
+  m_Sprite: {fileID: 4804996213483478276, guid: 0a759c7d87d38064d86ddd51f79ecad3,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,6 +103,6 @@ SpriteRenderer:
   m_Size: {x: 2, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

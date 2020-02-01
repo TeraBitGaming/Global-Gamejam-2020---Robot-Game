@@ -65,7 +65,7 @@ public class Container : MonoBehaviour
         //If the player is not carrying things
         if (itemCount > 0)
         {
-            itemToReturn = Instantiate(emptyItemPrefab, (Vector2)transform.position + new Vector2(0, -2), Quaternion.identity, FindObjectOfType<ItemManager>().transform);
+            itemToReturn = Instantiate(emptyItemPrefab, FindObjectOfType<ItemManager>().transform);
             itemToReturn.GetComponent<ItemObject>().SetItemData(itemType);
             if (itemToReturn.GetComponent<ItemObject>().GetItemData().GetName() != "")
                 itemToReturn.name = itemToReturn.GetComponent<ItemObject>().GetItemData().GetName() + itemToReturn.name;
@@ -79,14 +79,6 @@ public class Container : MonoBehaviour
         else
         {
             return null;
-        }
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.J))
-        {
-            GetItemFromContainer();
         }
     }
 }

@@ -10,8 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53dce1ac6b4f42845aaf841c37a2bfc6, type: 3}
-  m_Name: New Item
+  m_Name: Bearing
   m_EditorClassIdentifier: 
-  iName: TESTOBJ1
-  iSprite: {fileID: -6581602909134129982, guid: 0a759c7d87d38064d86ddd51f79ecad3,
-    type: 3}
+  iName: Bearing
+  iSprite: {fileID: 3700318679547164722, guid: e17bb9809a203564f82379274a704388, type: 3}
