@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: New Item 3
   m_EditorClassIdentifier: 
   iName: TESTOBJ4
-  iSprite: {fileID: -4112847693050698011, guid: 0a759c7d87d38064d86ddd51f79ecad3,
-    type: 3}
+  iSprite: {fileID: -250067868846138307, guid: 0a759c7d87d38064d86ddd51f79ecad3, type: 3}

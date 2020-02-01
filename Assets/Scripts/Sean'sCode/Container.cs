@@ -11,6 +11,8 @@ public class Container : MonoBehaviour
     [SerializeField]
     private Item itemType;
     private ItemManager im;
+    [SerializeField]
+    private GameObject inside;
 
     private void Start()
     {
@@ -30,6 +32,8 @@ public class Container : MonoBehaviour
                     {
                         itemType = collision.GetComponent<ItemObject>().GetItemData();
                         itemCount++;
+                        if(itemType.GetSprite() != null)
+                            inside.GetComponent<SpriteRenderer>().sprite = itemType.GetSprite();
                         im.RemoveItem(collision.GetComponent<ItemObject>());
                         Destroy(collision.gameObject);
                     }
