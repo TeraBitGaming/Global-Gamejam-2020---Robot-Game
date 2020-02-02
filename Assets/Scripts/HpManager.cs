@@ -14,7 +14,7 @@ public class HpManager : MonoBehaviour
     [SerializeField]
     private HeartPieceShatterer[] HPS;
     
-    private float invincibility = 0f;
+    private float invincibility = 59f;
 
     public void takeDamage(){
         if(invincibility >= 59f){

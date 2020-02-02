@@ -71,6 +71,8 @@ public class PlayerController2D : MonoBehaviour
 
     void Update(){
 
+        Debug.Log(rb.velocity.y);
+
         // if(!hpManager.getInvincible() && controlSuppressed){
         //     controlSuppressed = false;
         // }
@@ -208,6 +210,12 @@ public class PlayerController2D : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter2D(Collider2D col){
+        if (-rb.velocity.y > 11){
+            rb.AddForce(transform.up * 50, ForceMode2D.Impulse);
+        }
+    }
+
     // Grounded detection.
     void OnTriggerStay2D(Collider2D col){
             if(col.gameObject.tag != "JumpIgnore"){
@@ -232,13 +240,6 @@ public class PlayerController2D : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collider){
         if(collider.gameObject.tag == "Enemy" & !hpManager.getInvincible()){
-            // controlSuppressed = true;
-
-            // launchdirection = new Vector2(gameObject.transform.position.x - collider.collider.transform.position.x * 3, gameObject.transform.position.y - collider.collider.transform.position.y * -3);
-            // Debug.Log(launchdirection);
-            // if(rb.velocity.x < 10 && rb.velocity.y < 10){
-            //     rb.AddForce(launchdirection, ForceMode2D.Impulse);
-            // }
             hpManager.takeDamage();
         }
     }
