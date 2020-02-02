@@ -89,7 +89,7 @@ public class ThingsToRepair : MonoBehaviour
                 requiredItems.Remove(collision.GetComponent<ItemObject>().GetItemData());
             }
 
-            if (requiredItems.Count <= 0)
+            if (requiredItems.Count <= 0)   
             {
                 Destroy(this.gameObject);
             }

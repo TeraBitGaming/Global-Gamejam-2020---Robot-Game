@@ -60,4 +60,16 @@ public class ItemObject : MonoBehaviour
         Invoke("PlayBlinkingAnim", lifeTime);
         IsBeingHeld = false;
     }
+
+    public　void CheckHolding()
+    {
+        if(IsBeingHeld)
+        {
+            GetComponent<Animator>().SetBool("Dying", false);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("Dying", true);
+        }
+    }
 }

@@ -627,8 +627,8 @@ MonoBehaviour:
   difficulty: 1
   itemList:
   - {fileID: 11400000, guid: 30eb6dd8038991342843d6a29537c28c, type: 2}
-  - {fileID: 11400000, guid: 904cf588d498533479ae279c765c6c04, type: 2}
   - {fileID: 11400000, guid: d7022b21f0643034d917f899f75172f4, type: 2}
+  - {fileID: 11400000, guid: 904cf588d498533479ae279c765c6c04, type: 2}
   - {fileID: 11400000, guid: 72afadcdc616b5b4eb4ae1a70fd89fac, type: 2}
 --- !u!4 &1936464254
 Transform:
@@ -722,7 +722,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1948031716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.79, y: -8.03, z: 0}
+  m_LocalPosition: {x: 7.9, y: -6.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
