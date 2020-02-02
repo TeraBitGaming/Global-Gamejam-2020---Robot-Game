@@ -105,8 +105,15 @@ public class ThingsToRepair : MonoBehaviour
 
             if (requiredItems.Count <= 0)   
             {
+                collision.GetComponent<ItemObject>().SelfDestruction();
+                FindObjectOfType<DifficultyController>().SpawnNewWall(transform);
                 Destroy(this.gameObject);
             }
         }
+    }
+
+    public void SetCounterTo(float f)
+    {
+        stageCounter = f;
     }
 }
