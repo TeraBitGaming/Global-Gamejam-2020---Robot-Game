@@ -34,10 +34,16 @@ public class ThingsToRepair : MonoBehaviour
 
     private GameObject obj;
 
+    private AudioManager audio;
+
     private void Start()
     {
+        player = FindObjectOfType<PlayerController2D>().transform;
         //requiredItems = FindObjectOfType<DifficultyController>().GenerateRequiredItems();
         StartCoroutine("SpawningMobs");
+
+        // get the audiomanager script.
+        audio = GameObject.FindWithTag("SoundManager").GetComponent<AudioManager>();
     }
 
 
@@ -53,6 +59,12 @@ public class ThingsToRepair : MonoBehaviour
             {
                 stageCounter = 0;
                 stage++;
+                if (stage == 5){
+                    audio.playSoundClipOneShot(6);
+                } else  {
+                    audio.playSoundClipOneShot(7);
+                }
+                
                 RefreshStage();
             }
         }

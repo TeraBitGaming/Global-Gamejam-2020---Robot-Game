@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5585432603065453040}
   m_Layer: 0
   m_Name: ThingsToRepair
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_TagString: JumpIgnore
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -97,7 +97,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -133,4 +133,8 @@ MonoBehaviour:
   spawningChance: 0
   RandomNum: 0
   timeBetween: {x: 10, y: 30}
-  requiredItems: []
+  requiredItems:
+  - {fileID: 11400000, guid: 904cf588d498533479ae279c765c6c04, type: 2}
+  secPerSpawningTry: 5
+  enemy: {fileID: 8680783579026967646, guid: c0c950483dfd32141a00f20dd02c144e, type: 3}
+  player: {fileID: 0}

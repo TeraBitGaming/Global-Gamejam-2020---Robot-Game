@@ -25,6 +25,8 @@ public class PlayerController2D : MonoBehaviour
 
     private int mask = 1 << 8;
 
+    private AudioManager audio;
+
     [SerializeField]
     private HpManager hpManager;
 
@@ -56,6 +58,7 @@ public class PlayerController2D : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         CC2d = gameObject.GetComponent<CapsuleCollider2D>();
+        audio = GameObject.FindWithTag("SoundManager").GetComponent<AudioManager>();
         mask = ~mask;
         // Debug.Log(LayerMask.GetMask("Player"));
     }
@@ -64,6 +67,7 @@ public class PlayerController2D : MonoBehaviour
     {
         // This part is for jumping & moving.
         if(Input.GetAxis("Jump") != 0 && grounded == true){
+            audio.playSoundClipOneShot(3);
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
         }
 
@@ -74,7 +78,7 @@ public class PlayerController2D : MonoBehaviour
 
     void Update(){
 
-        Debug.Log(rb.velocity.y);
+        // Debug.Log(-rb.velocity.y);
 
         // if(!hpManager.getInvincible() && controlSuppressed){
         //     controlSuppressed = false;
@@ -122,6 +126,7 @@ public class PlayerController2D : MonoBehaviour
 
             if(hit.collider != null){
                 if (hit.collider.tag == "Grabbable Object"){
+                    audio.playSoundClipOneShot(1);
                     target = hit.transform.gameObject;
                     target.GetComponent<ItemObject>().GetPickedUp();
                     grabLock = true;
@@ -223,6 +228,9 @@ public class PlayerController2D : MonoBehaviour
 
     // Grounded detection.
     void OnTriggerStay2D(Collider2D col){
+        if (!grounded && col.gameObject.tag != "JumpIgnore"){
+            audio.playSoundClipOneShot(4);
+        }
             if(col.gameObject.tag != "JumpIgnore"){
                 grounded = true;
             }

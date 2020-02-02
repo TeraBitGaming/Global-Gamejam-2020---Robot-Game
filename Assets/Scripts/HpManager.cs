@@ -16,9 +16,12 @@ public class HpManager : MonoBehaviour
     
     private float invincibility = 59f;
 
+    private AudioManager audio;
+
     public void takeDamage(){
         if(invincibility >= 59f){
             invincibility = 0f;
+            audio.playSoundClipOneShot(2);
             HP--;
             HPS[HP].shatter();
            
@@ -42,6 +45,7 @@ public class HpManager : MonoBehaviour
     void Start()
     {
         HP = 3;
+        audio = GameObject.FindWithTag("SoundManager").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
