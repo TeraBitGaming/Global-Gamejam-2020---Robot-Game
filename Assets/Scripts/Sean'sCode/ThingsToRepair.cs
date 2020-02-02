@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class ThingsToRepair : MonoBehaviour
 {
@@ -21,10 +22,21 @@ public class ThingsToRepair : MonoBehaviour
     private Vector2 timeBetween = new Vector2(10, 30);
     [SerializeField]
     private List<Item> requiredItems = new List<Item>();
+    [SerializeField]
+    private float secPerSpawningTry = 5;
+
+    // Wesley's additions
+    [SerializeField]
+    private GameObject enemy;
+
+    [SerializeField]
+    private Transform player;
+
+    private GameObject obj;
 
     private void Start()
     {
-        requiredItems = FindObjectOfType<DifficultyController>().GenerateRequiredItems();
+        //requiredItems = FindObjectOfType<DifficultyController>().GenerateRequiredItems();
         StartCoroutine("SpawningMobs");
     }
 
@@ -59,10 +71,12 @@ public class ThingsToRepair : MonoBehaviour
             {
                 //Spawning Mob
                 print("Mob spawned, chance was " + RandomNum);
+                obj = Instantiate(enemy, gameObject.transform.position, Quaternion.identity);
+                obj.GetComponent<AIDestinationSetter>().target = player;
             }
         }
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(secPerSpawningTry);
 
         StartCoroutine(SpawningMobs());
 

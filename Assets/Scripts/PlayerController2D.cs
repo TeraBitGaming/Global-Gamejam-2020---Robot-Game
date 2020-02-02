@@ -40,6 +40,9 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField]
     private bool grounded = true;
 
+    [SerializeField]
+    private ParticleSystem ps;
+
     // This is to check if the vector varToMask is between minMax & -minMax.
     bool vector2Mask(Vector2 varToMask, float minMax){
         if(varToMask.x < minMax && varToMask.x > -minMax && varToMask.y < minMax && varToMask.y > -minMax){
@@ -71,7 +74,7 @@ public class PlayerController2D : MonoBehaviour
 
     void Update(){
 
-        Debug.Log(rb.velocity.y);
+        // Debug.Log(-rb.velocity.y);
 
         // if(!hpManager.getInvincible() && controlSuppressed){
         //     controlSuppressed = false;
@@ -212,7 +215,9 @@ public class PlayerController2D : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col){
         if (-rb.velocity.y > 11){
-            rb.AddForce(transform.up * 50, ForceMode2D.Impulse);
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(transform.up * 10, ForceMode2D.Impulse);
+            ps.Play();
         }
     }
 

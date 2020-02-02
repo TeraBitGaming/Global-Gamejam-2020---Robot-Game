@@ -12,6 +12,9 @@ public class DifficultyController : MonoBehaviour
     private float chanceOfSpawningMobsBase = 0.25f;
     [SerializeField]
     private float chanceOfSpawningMobs;
+
+    [SerializeField]
+    private float chancePara = 0.1f;
     [SerializeField]
     private float difficulty = 1;
     [SerializeField]
@@ -45,7 +48,7 @@ public class DifficultyController : MonoBehaviour
 
         if (chanceOfSpawningMobs <= 0.85f)
         {
-            chanceOfSpawningMobs = chanceOfSpawningMobsBase + 0.2f * (difficulty - 1);
+            chanceOfSpawningMobs = chanceOfSpawningMobsBase + chancePara * (difficulty - 1);
         }
     }
 

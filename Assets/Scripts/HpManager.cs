@@ -18,9 +18,10 @@ public class HpManager : MonoBehaviour
 
     public void takeDamage(){
         if(invincibility >= 59f){
+            invincibility = 0f;
             HP--;
             HPS[HP].shatter();
-            invincibility = 0f;
+           
         }
 
         if(HP == 0){
