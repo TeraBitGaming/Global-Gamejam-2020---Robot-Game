@@ -71,7 +71,7 @@ public class PlayerController2D : MonoBehaviour
 
     void Update(){
 
-        Debug.Log(rb.velocity.y);
+        //Debug.Log(rb.velocity.y);
 
         // if(!hpManager.getInvincible() && controlSuppressed){
         //     controlSuppressed = false;

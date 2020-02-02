@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,11 +17,27 @@ public class DifficultyController : MonoBehaviour
     private float difficulty = 1;
     [SerializeField]
     private List<Item> itemList;
+    [SerializeField]
+    private Vector2 secBetween = new Vector2(5, 60);
+    [SerializeField]
+    private List<Transform> spots = new List<Transform>();
+    [SerializeField]
+    private GameObject prefab;
 
+ 
     private void Start()
     {
         secondsPerStage = secondsPerStageBase;
         chanceOfSpawningMobs = chanceOfSpawningMobsBase;
+        InitSpots();
+    }
+
+    private void InitSpots()
+    {
+        foreach(Transform t in spots)
+        {
+            StartCoroutine(NewWallRequest(t));
+        }
     }
 
     public List<Item> GenerateRequiredItems()
@@ -63,5 +80,17 @@ public class DifficultyController : MonoBehaviour
     public float GetChance()
     { return chanceOfSpawningMobs; }
 
+    public void SpawnNewWall(Transform t)
+    {
+        Instantiate(prefab, t.position, Quaternion.identity);
+        prefab.GetComponent<ThingsToRepair>().SetCounterTo(-UnityEngine.Random.Range(secBetween.x, secBetween.y));
+    }
+
+    public IEnumerator NewWallRequest(Transform t)
+    {
+        yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(secBetween.x, secBetween.y));
+        Instantiate(prefab, t.position, Quaternion.identity);
+        print("1");
+    }
 
 }
