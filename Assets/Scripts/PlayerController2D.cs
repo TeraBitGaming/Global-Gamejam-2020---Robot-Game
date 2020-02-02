@@ -224,6 +224,22 @@ public class PlayerController2D : MonoBehaviour
             rb.AddForce(transform.up * 10, ForceMode2D.Impulse);
             ps.Play();
         }
+
+        
+        if(target == null)
+        {
+                    if(col.gameObject.GetComponent<ItemObject>())
+        {
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                target = col.gameObject;
+                    target.GetComponent<ItemObject>().GetPickedUp();
+                    grabLock = true;
+
+            }
+        }
+        }
+
     }
 
     // Grounded detection.
@@ -245,6 +261,20 @@ public class PlayerController2D : MonoBehaviour
                 }
             }
         }
+        
+        if(target == null)
+        {
+                    if(col.gameObject.GetComponent<ItemObject>())
+        {
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                target = col.gameObject;
+                    target.GetComponent<ItemObject>().GetPickedUp();
+                    grabLock = true;
+
+            }
+        }
+        }
     }
     
     void OnTriggerExit2D(Collider2D col){
@@ -255,5 +285,35 @@ public class PlayerController2D : MonoBehaviour
         if(collider.gameObject.tag == "Enemy" & !hpManager.getInvincible()){
             hpManager.takeDamage();
         }
+
+        if(target == null)
+        {
+                    if(collider.gameObject.GetComponent<ItemObject>())
+        {
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                target = collider.gameObject;
+                    target.GetComponent<ItemObject>().GetPickedUp();
+                    grabLock = true;
+
+            }
+        }
+        }
     }
+
+     void OnCollisionStay2D(Collision2D collider){
+         if(target == null)
+        {
+                    if(collider.gameObject.GetComponent<ItemObject>())
+        {
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                target = collider.gameObject;
+                    target.GetComponent<ItemObject>().GetPickedUp();
+                    grabLock = true;
+
+            }
+        }
+        }
+     }
 }
