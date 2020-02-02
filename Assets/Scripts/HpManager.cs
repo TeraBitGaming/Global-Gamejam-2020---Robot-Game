@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HpManager : MonoBehaviour
 {
@@ -9,13 +10,22 @@ public class HpManager : MonoBehaviour
 
     [SerializeField]
     private SpriteRenderer pCSprite;
+
+    [SerializeField]
+    private HeartPieceShatterer[] HPS;
     
     private float invincibility = 0f;
 
     public void takeDamage(){
         if(invincibility >= 59f){
             HP--;
+            HPS[HP].shatter();
             invincibility = 0f;
+        }
+
+        if(HP == 0){
+            // die
+            SceneManager.LoadScene(2);
         }
     }
 

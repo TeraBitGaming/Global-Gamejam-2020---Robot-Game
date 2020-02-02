@@ -150,6 +150,8 @@ MonoBehaviour:
   jumpForce: 40
   hpManager: {fileID: 0}
   yeetSpeed: 7
+  animationController: {fileID: 3802164705225076400}
+  spriteRenderer: {fileID: 4715838866340489349}
   grounded: 1
 --- !u!70 &4715838866340489344
 CapsuleCollider2D:

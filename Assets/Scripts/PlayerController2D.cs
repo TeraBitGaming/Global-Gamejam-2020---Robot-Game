@@ -23,15 +23,19 @@ public class PlayerController2D : MonoBehaviour
 
     private bool grabLock = false;
 
-    private bool controlSuppressed = false;
-
-    private Vector2 launchdirection;
+    private int mask = 1 << 8;
 
     [SerializeField]
     private HpManager hpManager;
 
     [SerializeField]
     private float yeetSpeed = 5;
+    
+    [SerializeField]
+    private Animator animationController;
+    
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
 
     [SerializeField]
     private bool grounded = true;
@@ -49,6 +53,8 @@ public class PlayerController2D : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         CC2d = gameObject.GetComponent<CapsuleCollider2D>();
+        mask = ~mask;
+        // Debug.Log(LayerMask.GetMask("Player"));
     }
 
     void FixedUpdate()
@@ -141,7 +147,7 @@ public class PlayerController2D : MonoBehaviour
             // Get "interact through raycasts"
             switch(lastDir){
                 case -1:
-                        interact = Physics2D.Raycast(transform.position, Vector2.left, 1f);
+                        interact = Physics2D.Raycast(transform.position, Vector2.left, 1f, mask);
                         Debug.DrawRay(transform.position, Vector2.left, Color.green);
                     break;
                 
@@ -149,7 +155,7 @@ public class PlayerController2D : MonoBehaviour
                     break;
 
                 case 1:
-                        interact = Physics2D.Raycast(transform.position, Vector2.right, 1f);
+                        interact = Physics2D.Raycast(transform.position, Vector2.right, 1f, mask);
                         Debug.DrawRay(transform.position, Vector2.right, Color.green);
                     break;
             }
@@ -159,40 +165,40 @@ public class PlayerController2D : MonoBehaviour
         }
 
         // This is for the animations.
-        gameObject.GetComponent<Animator>().SetFloat("Direction", Input.GetAxis("Horizontal"));
+        animationController.SetFloat("Direction", Input.GetAxis("Horizontal"));
 
         if(lastDir < 0){
-            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            spriteRenderer.flipX = true;
         } else {
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            spriteRenderer.flipX = false;
         }
 
         if(vector2Mask(rb.velocity, 1.5f)){
-            gameObject.GetComponent<Animator>().SetBool("Idle", true);
+            animationController.SetBool("Idle", true);
         } else {
-            gameObject.GetComponent<Animator>().SetBool("Idle", false);
+            animationController.SetBool("Idle", false);
         }
         
         if(rb.velocity.x != 0 && grounded == true){
-            gameObject.GetComponent<Animator>().SetBool("Walking", true);
+            animationController.SetBool("Walking", true);
         }
 
         if (rb.velocity.x < 0.1 && rb.velocity.x > -0.1){
-            gameObject.GetComponent<Animator>().SetBool("Walking", false);
+            animationController.SetBool("Walking", false);
         } else if (grounded == false){
-            gameObject.GetComponent<Animator>().SetBool("Walking", false);
+            animationController.SetBool("Walking", false);
         }
 
         if(rb.velocity.y > 0){
-            gameObject.GetComponent<Animator>().SetInteger("VerticalMomentum", 1);
-            gameObject.GetComponent<Animator>().SetBool("Idle", false);
+            animationController.SetInteger("VerticalMomentum", 1);
+            animationController.SetBool("Idle", false);
         } else if (rb.velocity.y < 0){
-            gameObject.GetComponent<Animator>().SetInteger("VerticalMomentum", -1);
-            gameObject.GetComponent<Animator>().SetBool("Idle", false);
+            animationController.SetInteger("VerticalMomentum", -1);
+            animationController.SetBool("Idle", false);
         }
         
         if (rb.velocity.y < 0.1 && rb.velocity.y > -0.1){
-            gameObject.GetComponent<Animator>().SetInteger("VerticalMomentum", 0);
+            animationController.SetInteger("VerticalMomentum", 0);
         }
 
         if (target != null){
@@ -204,8 +210,9 @@ public class PlayerController2D : MonoBehaviour
 
     // Grounded detection.
     void OnTriggerStay2D(Collider2D col){
-        grounded = true;
-
+            if(col.gameObject.tag != "JumpIgnore"){
+                grounded = true;
+            }
         if(col.GetComponent<Container>())
         {
             if (Input.GetKeyDown(KeyCode.E))
