@@ -19,11 +19,17 @@ public class PlayerController2D : MonoBehaviour
     private RaycastHit2D hit;
     private RaycastHit2D interact;
 
+    [SerializeField]
     private GameObject target;
+
+    [SerializeField]
+    private GameObject tempTarget;
+
+    private bool suppressTargetSwitch;
 
     private bool grabLock = false;
 
-    private int mask = 1 << 8;
+    private int mask;
 
     private AudioManager audio;
 
@@ -45,6 +51,17 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField]
     private ParticleSystem ps;
 
+    private int liveScoreCounter = 0;
+
+    private ScoreCounter score;
+
+    private bool controlSuppressed = false;
+
+    private int timer = 0;
+
+    [SerializeField]
+    private bool countScore = true;
+
     // This is to check if the vector varToMask is between minMax & -minMax.
     bool vector2Mask(Vector2 varToMask, float minMax){
         if(varToMask.x < minMax && varToMask.x > -minMax && varToMask.y < minMax && varToMask.y > -minMax){
@@ -54,13 +71,30 @@ public class PlayerController2D : MonoBehaviour
         }
     }
 
+    public void targetSetter(GameObject targetSet){
+        if (suppressTargetSwitch != true){
+            tempTarget = targetSet;
+        }
+    }
+
+    public GameObject getTempTarget(){
+        if (tempTarget != null){
+            return tempTarget;
+        } else {
+            return null;
+        }
+    }
+
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         CC2d = gameObject.GetComponent<CapsuleCollider2D>();
         audio = GameObject.FindWithTag("SoundManager").GetComponent<AudioManager>();
-        mask = ~mask;
-        // Debug.Log(LayerMask.GetMask("Player"));
+        
+        if(countScore){
+            score = GameObject.FindWithTag("ScoreCounter").GetComponent<ScoreCounter>();
+        }
+        mask = LayerMask.GetMask("Grabbable Object");
     }
 
     void FixedUpdate()
@@ -73,16 +107,34 @@ public class PlayerController2D : MonoBehaviour
 
         // if(!controlSuppressed) {
             rb.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, rb.velocity.y);
+        // } if (controlSuppressed) {
+
         // }
+
+        // Debug.Log(rb.velocity.y);
+
+        if (rb.velocity.y > 20f){
+            rb.velocity = new Vector2(rb.velocity.x, 20f);
+        } else if (-rb.velocity.y > 20f){
+            rb.velocity = new Vector2(rb.velocity.x, -20f);
+        }
     }
 
     void Update(){
+        
+        if(countScore){
+            if(timer < 60){
+                timer++;
+            }
 
-        // Debug.Log(-rb.velocity.y);
+            if(liveScoreCounter > 59){
+                score.addToScore(2);
+                liveScoreCounter = 0;
+            } else {
+                liveScoreCounter++;
+            }
+        }
 
-        // if(!hpManager.getInvincible() && controlSuppressed){
-        //     controlSuppressed = false;
-        // }
 
         // For foot-step tippy taps.
 
@@ -103,47 +155,37 @@ public class PlayerController2D : MonoBehaviour
         }
         
         // This is dedicated to getting and grabbing any object with the "Grabbable Object" tag.
-        if(target == null){
-            switch(lastDir){
-                case -1:
-                    if(Input.GetAxis("Fire1") != 0){
-                        hit = Physics2D.Raycast(transform.position, Vector2.left, 1f);
-                        Debug.DrawRay(transform.position, Vector2.left, Color.green);
-                    }
 
-                    break;
-                
-                case 0:
-                    break;
+        // Debug.Log(tempTarget);
 
-                case 1:
-                    if(Input.GetAxis("Fire1") != 0){
-                        hit = Physics2D.Raycast(transform.position, Vector2.right, 1f);
-                        Debug.DrawRay(transform.position, Vector2.right, Color.green);
-                    }
-                    break;
-            }
+        if(Input.GetAxis("Fire1") != 0 && tempTarget != null && target == null && grabLock != true){
+            target = tempTarget;
+            audio.playSoundClipOneShot(1);
+            target.GetComponent<ItemObject>().GetPickedUp();
+            suppressTargetSwitch = true;
+            grabLock = true;
 
-            if(hit.collider != null){
-                if (hit.collider.tag == "Grabbable Object"){
-                    audio.playSoundClipOneShot(1);
-                    target = hit.transform.gameObject;
-                    target.GetComponent<ItemObject>().GetPickedUp();
-                    grabLock = true;
-                }
-            }
+            tempTarget.GetComponent<ItemTargetSetter>().StartCoroutine("stopDetection", false);
         }
 
         // This is dedicated to throwing the target (object with "Grabbable Object" tag).
+
         if(target != null){
             target.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1, 0);
 
             if(Input.GetAxis("Fire1") != 0 && grabLock == false){
-                
-                target.GetComponent<Rigidbody2D>().velocity = new Vector2(lastDir * yeetSpeed, 3.0f) + rb.velocity;
+
+                target.GetComponent<Rigidbody2D>().velocity = new Vector2(lastDir * yeetSpeed, 5.0f) + rb.velocity;
                 target.GetComponent<ItemObject>().GetThrowedAway();
                 target = null;
+                tempTarget.GetComponent<ItemTargetSetter>().StartCoroutine("stopDetection", true);
+                tempTarget = null;
+                suppressTargetSwitch = false;
             }
+        }
+
+        if(target == null){
+            suppressTargetSwitch = false;
         }
 
         // This is to make sure you don't immediately throw the item if you keep the button pressed.
@@ -171,7 +213,7 @@ public class PlayerController2D : MonoBehaviour
             }
 
             // Use "interact" to call functions within a script that corresponds with the item used.
-            // interact.collider.GetComponent( SCRIPT GOES HERE).FUNCTION TO USE;
+            // interact.collider.GetComponent( SCRIPT GOES HERE ).FUNCTION TO USE;
         }
 
         // This is for the animations.
@@ -219,26 +261,25 @@ public class PlayerController2D : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        if (-rb.velocity.y > 11){
+        if (-rb.velocity.y > 10.5f){
             rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.AddForce(transform.up * 10, ForceMode2D.Impulse);
             ps.Play();
         }
-
         
-        if(target == null)
-        {
-                    if(col.gameObject.GetComponent<ItemObject>())
-        {
-            if(Input.GetKeyDown(KeyCode.J))
-            {
-                target = col.gameObject;
-                    target.GetComponent<ItemObject>().GetPickedUp();
-                    grabLock = true;
+        // if(target == null)
+        // {
+        //     if(col.gameObject.GetComponent<ItemObject>())
+        //     {
+        //         if(Input.GetKeyDown(KeyCode.J))
+        //         {
+        //             target = col.gameObject;
+        //                 target.GetComponent<ItemObject>().GetPickedUp();
+        //                 grabLock = true;
 
-            }
-        }
-        }
+        //         }
+        //     }
+        // }
 
     }
 
@@ -247,9 +288,15 @@ public class PlayerController2D : MonoBehaviour
         if (!grounded && col.gameObject.tag != "JumpIgnore"){
             audio.playSoundClipOneShot(4);
         }
-            if(col.gameObject.tag != "JumpIgnore"){
-                grounded = true;
-            }
+        
+        if(col.gameObject.tag != "JumpIgnore"){
+            grounded = true;
+        }
+
+        if(col.gameObject.tag != "Grabbable Object" && target ){
+            grounded = true;
+        }
+        
         if(col.GetComponent<Container>())
         {
             if (Input.GetKeyDown(KeyCode.E))
@@ -262,19 +309,6 @@ public class PlayerController2D : MonoBehaviour
             }
         }
         
-        if(target == null)
-        {
-                    if(col.gameObject.GetComponent<ItemObject>())
-        {
-            if(Input.GetKeyDown(KeyCode.J))
-            {
-                target = col.gameObject;
-                    target.GetComponent<ItemObject>().GetPickedUp();
-                    grabLock = true;
-
-            }
-        }
-        }
     }
     
     void OnTriggerExit2D(Collider2D col){
@@ -285,35 +319,39 @@ public class PlayerController2D : MonoBehaviour
         if(collider.gameObject.tag == "Enemy" & !hpManager.getInvincible()){
             hpManager.takeDamage();
         }
+        
+        // if ( collider.gameObject.tag == "Enemy"){
+            // rb.AddForce
+        // }
 
-        if(target == null)
-        {
-                    if(collider.gameObject.GetComponent<ItemObject>())
-        {
-            if(Input.GetKeyDown(KeyCode.J))
-            {
-                target = collider.gameObject;
-                    target.GetComponent<ItemObject>().GetPickedUp();
-                    grabLock = true;
+        // if(target == null)
+        // {
+        //             if(collider.gameObject.GetComponent<ItemObject>())
+        // {
+        //     if(Input.GetKeyDown(KeyCode.J))
+        //     {
+        //         target = collider.gameObject;
+        //             target.GetComponent<ItemObject>().GetPickedUp();
+        //             grabLock = true;
 
-            }
-        }
-        }
+        //     }
+        // }
+        // }
     }
 
      void OnCollisionStay2D(Collision2D collider){
-         if(target == null)
-        {
-                    if(collider.gameObject.GetComponent<ItemObject>())
-        {
-            if(Input.GetKeyDown(KeyCode.J))
-            {
-                target = collider.gameObject;
-                    target.GetComponent<ItemObject>().GetPickedUp();
-                    grabLock = true;
+        // if(target == null)
+        // {
+        //     if(collider.gameObject.GetComponent<ItemObject>())
+        //     {
+        //         if(Input.GetKeyDown(KeyCode.J))
+        //         {
+        //             target = collider.gameObject;
+        //                 target.GetComponent<ItemObject>().GetPickedUp();
+        //                 grabLock = true;
 
-            }
-        }
-        }
-     }
+        //         }
+        //     }
+        // }
+    }
 }

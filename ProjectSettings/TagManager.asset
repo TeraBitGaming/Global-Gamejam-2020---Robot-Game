@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - JumpIgnore
   - SoundManager
+  - ScoreCounter
   layers:
   - Default
   - TransparentFX

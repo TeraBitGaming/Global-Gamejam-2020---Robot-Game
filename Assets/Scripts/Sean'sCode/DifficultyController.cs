@@ -93,7 +93,7 @@ public class DifficultyController : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(UnityEngine.Random.Range(secBetween.x, secBetween.y));
         Instantiate(prefab, t.position, Quaternion.identity);
-        print("1");
+        // print("1");
     }
 
 }

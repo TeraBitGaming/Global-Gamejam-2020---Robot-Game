@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScene.unity
     guid: 510b64f69339b3646815d28c3fcce0db
   - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: 4b84a0fdec33a1d4882001809f460ef6
+  - enabled: 1
     path: Assets/Scenes/Tim's Scene.unity
     guid: 183b4fff4f12e55459a073214106c13e
   - enabled: 1

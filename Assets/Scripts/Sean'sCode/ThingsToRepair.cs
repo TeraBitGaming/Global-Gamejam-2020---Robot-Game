@@ -36,6 +36,8 @@ public class ThingsToRepair : MonoBehaviour
 
     private AudioManager audio;
 
+    private ScoreCounter score;
+
     private void Start()
     {
         player = FindObjectOfType<PlayerController2D>().transform;
@@ -44,6 +46,7 @@ public class ThingsToRepair : MonoBehaviour
 
         // get the audiomanager script.
         audio = GameObject.FindWithTag("SoundManager").GetComponent<AudioManager>();
+        score = GameObject.FindWithTag("ScoreCounter").GetComponent<ScoreCounter>();
     }
 
 
@@ -82,7 +85,7 @@ public class ThingsToRepair : MonoBehaviour
             if(RandomNum <= spawningChance)
             {
                 //Spawning Mob
-                print("Mob spawned, chance was " + RandomNum);
+                // print("Mob spawned, chance was " + RandomNum);
                 obj = Instantiate(enemy, gameObject.transform.position, Quaternion.identity);
                 obj.GetComponent<AIDestinationSetter>().target = player;
             }
@@ -117,6 +120,7 @@ public class ThingsToRepair : MonoBehaviour
 
             if (requiredItems.Count <= 0)   
             {
+                score.addToScore(1);
                 collision.GetComponent<ItemObject>().SelfDestruction();
                 FindObjectOfType<DifficultyController>().SpawnNewWall(transform);
                 Destroy(this.gameObject);
